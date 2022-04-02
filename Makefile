@@ -1,5 +1,5 @@
 Program: obj/main.o obj/hippodrome.o
-	gcc -o bin/Program obj/main.o obj/hippodrome.o
+	gcc -o bin/Program obj/main.o obj/hippodrome.o -l sqlite3
 
 obj/main.o: src/main.c
 	gcc -o obj/main.o -c src/main.c

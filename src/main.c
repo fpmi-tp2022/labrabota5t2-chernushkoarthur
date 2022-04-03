@@ -9,8 +9,9 @@ int main() {
 	fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
 	return 0;
   }
-  Authentication(db);
-
+  int user_type;
+  LogInMenu(db, &user_type);
+  printf("%d", user_type);
   sqlite3_close(db);
   return 0;
 }

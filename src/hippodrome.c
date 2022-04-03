@@ -49,7 +49,7 @@ void Authentication(sqlite3 *db) {
   sqlite3_finalize(res);
 }
 
-void LogIn(sqlite3 *db, int* user_type) {
+void LogIn(sqlite3 *db, int *user_type) {
   int cont = 1;
   char surname[30], password[30];
   char *sql;
@@ -79,5 +79,31 @@ void LogIn(sqlite3 *db, int* user_type) {
 	*user_type = sqlite3_column_int(res, 1);
 	sqlite3_finalize(res);
 	cont = 0;
+  }
+}
+
+void LogInMenu(sqlite3 *db, int *user_type) {
+  int cont = 1;
+  while (cont) {
+	printf("Log In:\n");
+	printf("1. Log In\n");
+	printf("2. Authentication\n");
+	int choice;
+	scanf("%d", &choice);
+	switch (choice) {
+	  case 1: {
+		LogIn(db, user_type);
+		cont = 0;
+		break;
+	  }
+	  case 2: {
+		Authentication(db);
+		break;
+	  }
+	  default: {
+		printf("Wrong input. Try again.\n");
+		break;
+	  }
+	}
   }
 }

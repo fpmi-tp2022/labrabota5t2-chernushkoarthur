@@ -48,3 +48,36 @@ void Authentication(sqlite3 *db) {
   sqlite3_step(res);
   sqlite3_finalize(res);
 }
+
+void LogIn(sqlite3 *db, int* user_type) {
+  int cont = 1;
+  char surname[30], password[30];
+  char *sql;
+  int rc;
+  while (cont) {
+	printf("Enter your surname:\n");
+	scanf("%s", surname);
+	printf("Enter your password:\n");
+	scanf("%s", password);
+	sql = "SELECT * FROM users WHERE surname = ? and password = ?;";
+	sqlite3_stmt *res;
+	rc = sqlite3_prepare_v2(db, sql, -1, &res, 0);
+
+	if (rc == SQLITE_OK) {
+	  sqlite3_bind_text(res, 1, surname, -1, 0);
+	  sqlite3_bind_text(res, 2, password, -1, 0);
+	} else {
+	  fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+	}
+
+	int step = sqlite3_step(res);
+	if (step != SQLITE_ROW) {
+	  printf("Wrong surname or password. Try again.\n");
+	  sqlite3_finalize(res);
+	  continue;
+	}
+	*user_type = sqlite3_column_int(res, 1);
+	sqlite3_finalize(res);
+	cont = 0;
+  }
+}

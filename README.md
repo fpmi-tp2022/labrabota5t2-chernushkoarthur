@@ -18,6 +18,6 @@ Team chernushkoarthur - 13 group 2 course BSU:
 
 >>>>>>>>*** 
 
-
+![An old rock in the desert](/img/shiprock.jpg "Shiprock, New Mexico by Beau Rogers")
 
 *Copyright © 2022 chernushkoarthur Inc. All rights reserved.*

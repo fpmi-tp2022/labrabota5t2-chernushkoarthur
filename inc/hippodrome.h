@@ -1,3 +1,4 @@
 #include <stdio.h>
+#include <sqlite3.h>
 
-void PrintHello();
+void Authentication(sqlite3* db);

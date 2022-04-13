@@ -10,8 +10,10 @@ int main() {
 	return 0;
   }
   int user_type;
-  LogInMenu(db, &user_type);
-  printf("%d", user_type);
+  char surname[30];
+  LogInMenu(db, &user_type, surname);
+  printf("%d\n", user_type);
+  printf("%s\n", surname);
   sqlite3_close(db);
   return 0;
 }

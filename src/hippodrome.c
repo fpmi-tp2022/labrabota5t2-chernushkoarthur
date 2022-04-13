@@ -104,3 +104,32 @@ void LogInMenu(sqlite3 *db, int *user_type, char *surname) {
 	}
   }
 }
+
+void Select4(sqlite3 *db, const char *surname) {
+  char *sql = "SELECT horse_id, name, age, experience, price, date, taken_place FROM\n"
+			  "(SELECT * FROM horses WHERE owner = ?) as owner_horses\n"
+			  "INNER JOIN races\n"
+			  "WHERE horse_id = owner_horses.id;";
+  sqlite3_stmt *res;
+  int rc = sqlite3_prepare_v2(db, sql, -1, &res, 0);
+
+  if (rc == SQLITE_OK) {
+	sqlite3_bind_text(res, 1, surname, -1, 0);
+  } else {
+	fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+  }
+
+  int step = sqlite3_step(res);
+  if (step != SQLITE_ROW) {
+	printf("This owner has no horses\n");
+  }
+  while (step == SQLITE_ROW) {
+	for (int i = 0; i < sqlite3_column_count(res); ++i) {
+	  printf("%s = %s\n", sqlite3_column_name(res, i), sqlite3_column_text(res, i));
+	}
+	printf("\n");
+	step = sqlite3_step(res);
+  }
+
+  sqlite3_finalize(res);
+}

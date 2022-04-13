@@ -104,3 +104,43 @@ void LogInMenu(sqlite3 *db, int *user_type, char *surname) {
 	}
   }
 }
+
+void Select5(sqlite3 *db) {
+  char *sql = "SELECT races.id, date, race_number, horse_id, name, age, experience, owner, price, jockey_id, taken_place FROM \n"
+			  "(SELECT *, (substr(date,7,4)||'-'||substr(date,1,2)||'-'||substr(date,4,2)) as true_date FROM races) as races\n"
+			  "INNER JOIN horses\n"
+			  "WHERE horse_id=horses.id and true_date>=? and true_date<=?";
+  sqlite3_stmt *res;
+  int rc = sqlite3_prepare_v2(db, sql, -1, &res, 0);
+
+  char period_beginning[12], period_end[12];
+  int month, day, year;
+  printf("Enter period beginning:\n");
+  scanf("%d.%d.%d", &month, &day, &year);
+  sprintf(period_beginning, "%04d-%02d-%02d", year, month, day);
+
+  printf("Enter period end:\n");
+  scanf("%d.%d.%d", &month, &day, &year);
+  sprintf(period_end, "%04d-%02d-%02d", year, month, day);
+
+  if (rc == SQLITE_OK) {
+	sqlite3_bind_text(res, 1, period_beginning, -1, 0);
+	sqlite3_bind_text(res, 2, period_end, -1, 0);
+  } else {
+	fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+  }
+
+  int step = sqlite3_step(res);
+  if (step != SQLITE_ROW) {
+	printf("There were no races during this period\n");
+  }
+  while (step == SQLITE_ROW) {
+	for (int i = 0; i < sqlite3_column_count(res); ++i) {
+	  printf("%s = %s\n", sqlite3_column_name(res, i), sqlite3_column_text(res, i));
+	}
+	printf("\n");
+	step = sqlite3_step(res);
+  }
+
+  sqlite3_finalize(res);
+}

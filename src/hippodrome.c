@@ -9,6 +9,17 @@ static int callback_user_type(void *data, int argc, char **argv, char **azColNam
   return 0;
 }
 
+static int callback(void *data, int argc, char **argv, char **azColName) {
+  int i;
+
+  for (i = 0; i < argc; i++) {
+	printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "(null)");
+  }
+
+  printf("\n");
+  return 0;
+}
+
 static void SQL_Error(int rc, char *zErrMsg) {
   if (rc != SQLITE_OK) {
 	fprintf(stderr, "SQL error: %s\n", zErrMsg);
@@ -136,4 +147,14 @@ void Select1(sqlite3 *db, const char *surname) {
   }
 
   sqlite3_finalize(res);
+}
+
+void Select2(sqlite3 *db) {
+  char *zErrMsg = 0;
+  char *sql = "SELECT id, surname, experience, birthday, address, races_number FROM jockeys\n"
+			  "INNER JOIN (SELECT jockey_id, max(races_count) as races_number "
+			  "FROM (SELECT jockey_id, count(jockey_id) as races_count FROM races GROUP BY jockey_id))\n"
+			  "WHERE jockey_id=jockeys.id;";
+  int rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+  SQL_Error(rc, zErrMsg);
 }

@@ -158,3 +158,32 @@ void Select2(sqlite3 *db) {
   int rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
   SQL_Error(rc, zErrMsg);
 }
+
+void Select3(sqlite3 *db, const char *surname) {
+  char *sql = "SELECT date, horse_id, name, age, experience, owner, price, taken_place FROM races\n"
+			  "INNER JOIN (SELECT id FROM jockeys WHERE surname=?) as jockey\n"
+			  "INNER JOIN horses\n"
+			  "WHERE jockey_id = jockey.id and horse_id = horses.id;";
+  sqlite3_stmt *res;
+  int rc = sqlite3_prepare_v2(db, sql, -1, &res, 0);
+
+  if (rc == SQLITE_OK) {
+	sqlite3_bind_text(res, 1, surname, -1, 0);
+  } else {
+	fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+  }
+
+  int step = sqlite3_step(res);
+  if (step != SQLITE_ROW) {
+	printf("This jockey didn't participate in the races\n");
+  }
+  while (step == SQLITE_ROW) {
+	for (int i = 0; i < sqlite3_column_count(res); ++i) {
+	  printf("%s = %s\n", sqlite3_column_name(res, i), sqlite3_column_text(res, i));
+	}
+	printf("\n");
+	step = sqlite3_step(res);
+  }
+
+  sqlite3_finalize(res);
+}

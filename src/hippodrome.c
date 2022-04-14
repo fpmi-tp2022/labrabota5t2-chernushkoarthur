@@ -116,6 +116,39 @@ void LogInMenu(sqlite3 *db, int *user_type, char *surname) {
   }
 }
 
+void Select1(sqlite3 *db, const char *surname) {
+  char *sql = "SELECT horses.id, name, age, horses.experience, price, races.date as races_date,"
+			  "surname as jockey_surname, jockeys.experience, birthday, address\n"
+			  "FROM (SELECT *, max(victory_count) FROM (SELECT owner_horses.id, name, age, experience, price, count(*) as victory_count FROM races\n"
+			  "INNER JOIN (SELECT * FROM horses WHERE owner=?) as owner_horses \n"
+			  "WHERE taken_place=1 and horse_id=owner_horses.id GROUP BY owner_horses.id)) as horses\n"
+			  "INNER JOIN races\n"
+			  "INNER JOIN jockeys\n"
+			  "WHERE horses.id =races.horse_id and races.jockey_id = jockeys.id;";
+  sqlite3_stmt *res;
+  int rc = sqlite3_prepare_v2(db, sql, -1, &res, 0);
+
+  if (rc == SQLITE_OK) {
+	sqlite3_bind_text(res, 1, surname, -1, 0);
+  } else {
+	fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+  }
+
+  int step = sqlite3_step(res);
+  if (step != SQLITE_ROW) {
+	printf("This owner has no winning horses\n");
+  }
+  while (step == SQLITE_ROW) {
+	for (int i = 0; i < sqlite3_column_count(res); ++i) {
+	  printf("%s = %s\n", sqlite3_column_name(res, i), sqlite3_column_text(res, i));
+	}
+	printf("\n");
+	step = sqlite3_step(res);
+  }
+
+  sqlite3_finalize(res);
+}
+
 void Select2(sqlite3 *db) {
   char *zErrMsg = 0;
   char *sql = "SELECT id, surname, experience, birthday, address, races_number FROM jockeys\n"

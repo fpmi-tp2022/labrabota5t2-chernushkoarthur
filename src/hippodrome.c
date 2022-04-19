@@ -307,6 +307,37 @@ void Select5(sqlite3* db) {
 	sqlite3_finalize(res);
 }
 
+void Insert(sqlite3 *db) {
+  char *sql = "INSERT INTO races (date, race_number, horse_id, jockey_id, taken_place)\n"
+			  "VALUES (?, ?, ?, ?, ?);";
+  sqlite3_stmt *res;
+  int rc = sqlite3_prepare_v2(db, sql, -1, &res, 0);
+
+  char date[12];
+  int race_number, horse_id, jockey_id, taken_place;
+  printf("Enter date:\n");
+  scanf("%s", date);
+  printf("Enter race number:\n");
+  scanf("%d", &race_number);
+  printf("Enter horse id:\n");
+  scanf("%d", &horse_id);
+  printf("Enter jockey id:\n");
+  scanf("%d", &jockey_id);
+  printf("Enter taken_place:\n");
+  scanf("%d", &taken_place);
+  if (rc == SQLITE_OK) {
+	sqlite3_bind_text(res, 1, date, -1, 0);
+	sqlite3_bind_int(res, 2, race_number);
+	sqlite3_bind_int(res, 3, horse_id);
+	sqlite3_bind_int(res, 4, jockey_id);
+	sqlite3_bind_int(res, 5, taken_place);
+  } else {
+	fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+  }
+  sqlite3_step(res);
+  sqlite3_finalize(res);
+}
+
 void Update(sqlite3 *db) {
   char *sql = "UPDATE races SET date=?, race_number=?, horse_id=?, jockey_id=?, taken_place=?\n"
 			  "WHERE id=?;";

@@ -30,5 +30,4 @@ void Delete(sqlite3 *db);
 
 
 
-
 #endif // HIPPODROME_H 

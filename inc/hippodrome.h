@@ -26,7 +26,7 @@ void Select5(sqlite3* db);
 
 void Insert(sqlite3* db);
 void Update(sqlite3* db);
-
+void Delete(sqlite3 *db);
 
 
 

@@ -367,6 +367,7 @@ void Select5(sqlite3* db) {
 	sqlite3_finalize(res);
 }
 
+
 void Select6(sqlite3* db, const char* jockey) {
 	char* sql = "SELECT races.id, date, race_number, horse_id, taken_place, true_date FROM \n"
 		"(SELECT *, (substr(date,7,4)||'-'||substr(date,1,2)||'-'||substr(date,4,2)) as true_date FROM races) as races\n"

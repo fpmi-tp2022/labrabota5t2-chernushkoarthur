@@ -13,3 +13,4 @@ void Select2(sqlite3 *db);
 void Select3(sqlite3 *db, const char *surname);
 void Select4(sqlite3 *db, const char *surname);
 void Select5(sqlite3 *db);
+void Delete(sqlite3 *db);

@@ -188,7 +188,6 @@ void Select3(sqlite3 *db, const char *surname) {
   sqlite3_finalize(res);
 }
 
-
 void Select4(sqlite3 *db, const char *surname) {
   char *sql = "SELECT horse_id, name, age, experience, price, date, taken_place FROM\n"
 			  "(SELECT * FROM horses WHERE owner = ?) as owner_horses\n"
@@ -257,3 +256,20 @@ void Select5(sqlite3 *db) {
 
   sqlite3_finalize(res);
 }
+
+void Delete(sqlite3 *db) {
+  char *sql = "DELETE FROM races WHERE id = ?;";
+  sqlite3_stmt *res;
+  int rc = sqlite3_prepare_v2(db, sql, -1, &res, 0);
+
+  int id;
+  printf("Enter id:\n");
+  scanf("%d", &id);
+  if (rc == SQLITE_OK) {
+	sqlite3_bind_int(res, 1, id);
+  } else {
+	fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+  }
+  sqlite3_step(res);
+  sqlite3_finalize(res);
+};

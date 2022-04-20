@@ -2,8 +2,9 @@
 #define JOCKEY_H
 
 #include <string.h>
-#include "hippodrome.h"
 #include <sqlite3.h>
+
+#include "hippodrome.h"
 
 
 void jockey_loop(sqlite3* db, const char *surname);

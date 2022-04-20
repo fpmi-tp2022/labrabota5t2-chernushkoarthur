@@ -8,7 +8,13 @@ void owner_loop(sqlite3* db, const char* surname)
 		printf("1. Read\n");
 		printf("2. Exit\n");
 		int choice = 10;
-		scanf("%d", &choice);
+		char c = '0';
+		if (scanf("%d", &choice) == 0)
+		{
+			printf("Wrong input. Try again.\n");
+			while ((c = getchar()) != '\n' && c != EOF);
+			continue;
+		}
 		switch (choice) {
 		case 1:
 			owner_read_loop(db, surname);
@@ -35,7 +41,13 @@ void owner_read_loop(sqlite3* db, const char* surname)
 		printf("2. My Best Horse\n");
 		printf("3. Exit\n");
 		int choice = 10;
-		scanf("%d", &choice);
+		char c = '0';
+		if (scanf("%d", &choice) == 0)
+		{
+			printf("Wrong input. Try again.\n");
+			while ((c = getchar()) != '\n' && c != EOF);
+			continue;
+		}
 		switch (choice) {
 		case 1:
 			Select4(db, surname);

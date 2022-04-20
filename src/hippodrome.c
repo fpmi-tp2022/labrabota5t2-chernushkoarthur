@@ -172,6 +172,7 @@ void main_loop(sqlite3* db, int* user_type, char* surname)
 		printf("2. Authentication\n");
 		printf("3. Exit\n");
 		printf("4. Clear\n");
+		printf("Type /exit at any point to break from action.\n");
 		int choice = 10;
 		char c = '0';
 		if (scanf("%d", &choice) == 0)

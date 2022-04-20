@@ -12,7 +12,6 @@ void admin_loop(sqlite3* db)
 		printf("5. Misc\n");
 		printf("6. Exit\n");
 		printf("7. Clear\n");
-		printf("Type /exit at any point to break from action.\n");
 		int choice = 10;
 		char c = '0';
 		if (scanf("%d", &choice) == 0)

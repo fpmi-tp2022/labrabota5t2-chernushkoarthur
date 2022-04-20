@@ -18,7 +18,6 @@ Team chernushkoarthur - 13 group 2 course BSU:
 >- Daniil Vasilyuchek  — Senior developer.
 >- Timofei Kuleshevich — Junior developer.
 
->>>>>>>>*** 
 
 ![An old rock in the desert](/img/shiprock.jpg "Shiprock, New Mexico by Beau Rogers")
 

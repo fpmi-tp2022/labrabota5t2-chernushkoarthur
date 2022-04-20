@@ -1,3 +1,5 @@
+install: Program
+
 Program: obj/main.o obj/hippodrome.o obj/admin.o obj/owner.o obj/jockey.o
 	gcc -o bin/Program $^ -l sqlite3
 
